@@ -482,24 +482,45 @@ const engine = {
         const tagList = engine.ui.newFileListDom(db, file.tags, "Tags");
         dom.appendChild(tagList);
       }
+      if (db.tag[file.id]) {
+        const tagList = engine.ui.newFileListDom(db, db.tag[file.id], "Tagged");
+        dom.appendChild(tagList);
+      }
 
       if (file.scores) {
-        const tagList = engine.ui.newFileListDom(db, file.scores, "Scores");
+        const tagList = engine.ui.newFileListDom(db, file.scores, "Rates");
         dom.appendChild(tagList);
       }
-
-      if (db.feed[file.id]) {
-        const tagList = engine.ui.newFileListDom(db, db.feed[file.id], "Feed");
-        dom.appendChild(tagList);
-      }
-
       if (db.score[file.id]) {
         const tagList = engine.ui.newFileListDom(
           db,
           db.score[file.id],
-          "Ratings"
+          "Rated"
         );
         dom.appendChild(tagList);
+      }
+
+      if (db.feed[file.id]) {
+        const feedList = engine.ui.newFileListDom(db, db.feed[file.id], "Feed");
+        dom.appendChild(feedList);
+      }
+
+      if (file.rels) {
+        const relList = engine.ui.newFileListDom(db, file.rels, "Relations");
+        dom.appendChild(relList);
+      }
+      if (db.rel[file.id]) {
+        const relList = engine.ui.newFileListDom(db, db.rel[file.id], "Related");
+        dom.appendChild(relList);
+      }
+      
+      if (file.refs) {
+        const refList = engine.ui.newFileListDom(db, file.refs, "References");
+        dom.appendChild(refList);
+      }
+      if (db.ref[file.id]) {
+        const refList = engine.ui.newFileListDom(db, db.ref[file.id], "Referenced");
+        dom.appendChild(refList);
       }
     },
   },
@@ -544,6 +565,32 @@ const engine = {
                   }
                   file.scores[tagID] = score;
                 }
+              }
+            }
+
+            for (const refID in db.rel) {
+              for (const referencedID of db.rel[refID]) {
+                const file = db.files[referencedID];
+                if (file) {
+                  if (undefined === file.refs) {
+                    file.refs = []
+                  }
+                  file.refs.push(refID)
+                }
+                console.log(file)
+              }
+            }
+
+            for (const relID in db.rel) {
+              for (const relatedID of db.rel[relID]) {
+                const file = db.files[relatedID];
+                if (file) {
+                  if (undefined === file.rels) {
+                    file.rels = []
+                  }
+                  file.rels.push(relID)
+                }
+                console.log(file)
               }
             }
 
