@@ -404,7 +404,7 @@ const engine = {
         attributes: {
           type: "text",
           name: "login",
-          placeholder: "Login",
+          placeholder: "login [guest]",
         },
       });
       loginInput.addEventListener("change", function (e) {
@@ -414,7 +414,7 @@ const engine = {
         attributes: {
           type: "password",
           name: "password",
-          placeholder: "Password",
+          placeholder: "password [guest]",
         },
       });
       passwordInput.addEventListener("change", function (e) {
@@ -497,7 +497,7 @@ const engine = {
       });
 
       const headerMenuDom = engine.ui.newDom("DIV") 
-      
+
       const backButton = engine.ui.newDom("A", {
         classes: ["ui-file-close-button"],
         innerHTML: "🔎︎",
