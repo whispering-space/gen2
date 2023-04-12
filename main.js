@@ -129,15 +129,15 @@ const engine = {
       }
       step += 1;
       this.Graph.graphData(engine.newGraphData(db, step, graphData));
+      // load complete
+      window.addEventListener("hashchange", (event) => {
+        engine.ui.loadUrl(db, event.newURL);
+      });
+      engine.ui.loadSearchList(db);
+      engine.ui.loadUrl(db, window.location.href);
     });
     this.Graph.graphData(graphData);
 
-    window.addEventListener("hashchange", (event) => {
-      engine.ui.loadUrl(db, event.newURL);
-    });
-
-    engine.ui.loadSearchList(db);
-    engine.ui.loadUrl(db, window.location.href);
   },
   focus(node) {
     const distance = 300;
@@ -363,8 +363,8 @@ const engine = {
       const id = url.split("/#/")[1] || "";
       const file = db.files[id];
       if (file != undefined && file.node != undefined) {
-        engine.focus(file.node);
         engine.ui.loadFile(db, file);
+        engine.focus(file.node);
       } else {
         engine.ui.unloadFile();
       }
@@ -466,7 +466,7 @@ const engine = {
       header.appendChild(backButton);
       dom.appendChild(header);
 
-      if (file.content) {
+      if (undefined !== file.content && file.content.length > 0) {
         const body = engine.ui.newDom("DIV", {
           classes: ["ui-file-body"],
           children: [
@@ -478,20 +478,20 @@ const engine = {
         dom.appendChild(body);
       }
 
-      if (file.tags) {
+      if (undefined !== file.tags && file.tags.length > 0) {
         const tagList = engine.ui.newFileListDom(db, file.tags, "Tags");
         dom.appendChild(tagList);
       }
-      if (db.tag[file.id]) {
+      if (undefined !== db.tag[file.id] && db.tag[file.id].length > 0) {
         const tagList = engine.ui.newFileListDom(db, db.tag[file.id], "Tagged");
         dom.appendChild(tagList);
       }
 
-      if (file.scores) {
+      if (undefined !== file.scores && Object.keys(file.scores) > 0) {
         const tagList = engine.ui.newFileListDom(db, file.scores, "Rates");
         dom.appendChild(tagList);
       }
-      if (db.score[file.id]) {
+      if (undefined !== db.score[file.id] && Object.keys(db.score[file.id]).length > 0) {
         const tagList = engine.ui.newFileListDom(
           db,
           db.score[file.id],
@@ -501,29 +501,29 @@ const engine = {
       }
 
 
-      if (file.feeds) {
+      if (undefined !== file.feeds && file.feeds.length > 0) {
         const feedList = engine.ui.newFileListDom(db, file.feeds, "Feeds");
         dom.appendChild(feedList);
       }
-      if (db.feed[file.id]) {
+      if (undefined !== db.feed[file.id] && db.feed[file.id].length > 0) {
         const feedList = engine.ui.newFileListDom(db, db.feed[file.id], "Menu");
         dom.appendChild(feedList);
       }
 
-      if (file.rels) {
+      if (undefined !== file.rels && file.rels.length > 0) {
         const relList = engine.ui.newFileListDom(db, file.rels, "Relations");
         dom.appendChild(relList);
       }
-      if (db.rel[file.id]) {
+      if (undefined !== db.rel[file.id] && db.rel[file.id].length > 0) {
         const relList = engine.ui.newFileListDom(db, db.rel[file.id], "Related");
         dom.appendChild(relList);
       }
       
-      if (file.refs) {
+      if (undefined !== file.refs && file.refs.length > 0) {
         const refList = engine.ui.newFileListDom(db, file.refs, "References");
         dom.appendChild(refList);
       }
-      if (db.ref[file.id]) {
+      if (undefined !== db.ref[file.id] && db.ref[file.id].length > 0) {
         const refList = engine.ui.newFileListDom(db, db.ref[file.id], "Referenced");
         dom.appendChild(refList);
       }
