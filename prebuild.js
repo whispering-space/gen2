@@ -208,7 +208,7 @@ const utils = {
             const matches = obj.data.content.matchAll(/#\/([A-z0-9-_+:]+)/g)
             for (const match of matches) {
                 const refID = match[1]
-                if (undefined === entities.ref[refID]) {
+                if (undefined === entities.ref[id]) {
                     entities.ref[id] = []
                 }
                 entities.ref[id].push(refID)
