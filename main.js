@@ -500,8 +500,13 @@ const engine = {
         dom.appendChild(tagList);
       }
 
+
+      if (file.feeds) {
+        const feedList = engine.ui.newFileListDom(db, file.feeds, "Feeds");
+        dom.appendChild(feedList);
+      }
       if (db.feed[file.id]) {
-        const feedList = engine.ui.newFileListDom(db, db.feed[file.id], "Feed");
+        const feedList = engine.ui.newFileListDom(db, db.feed[file.id], "Menu");
         dom.appendChild(feedList);
       }
 
@@ -577,7 +582,6 @@ const engine = {
                   }
                   file.refs.push(refID)
                 }
-                console.log(file)
               }
             }
 
@@ -590,7 +594,18 @@ const engine = {
                   }
                   file.rels.push(relID)
                 }
-                console.log(file)
+              }
+            }
+
+            for (const feedID in db.feed) {
+              for (const feededID of db.feed[feedID]) {
+                const file = db.files[feededID];
+                if (file) {
+                  if (undefined === file.feeds) {
+                    file.feeds = []
+                  }
+                  file.feeds.push(feedID)
+                }
               }
             }
 
