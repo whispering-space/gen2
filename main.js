@@ -495,12 +495,27 @@ const engine = {
           }),
         ],
       });
+
+      const headerMenuDom = engine.ui.newDom("DIV") 
+      
       const backButton = engine.ui.newDom("A", {
         classes: ["ui-file-close-button"],
-        innerHTML: "<",
+        innerHTML: "🔎︎",
         attributes: { href: "/#/" },
       });
-      header.appendChild(backButton);
+      headerMenuDom.appendChild(backButton);
+      
+      if (file.id != "menu" && undefined !== db.files["menu"]) {
+        const menu = engine.ui.newDom("A", {
+          classes: ["ui-file-close-button"],
+          innerHTML: "☰",
+          attributes: { href: "/#/menu" },
+        });
+        headerMenuDom.appendChild(menu);
+      }
+
+      header.appendChild(headerMenuDom)
+
       dom.appendChild(header);
 
       if (undefined !== file.content && file.content.length > 0) {

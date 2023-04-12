@@ -12,6 +12,13 @@ html, body, input, button, p, ul {
   padding: 0;
   margin: 0;
 }
+ul {
+  padding-left: 1rem;
+  list-style-type: "- ";
+}
+p, li {
+  margin-bottom: .5rem;
+}
 input, button {
   font-size: 1rem;
   padding: .2rem;
@@ -41,8 +48,7 @@ input, button {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background: url(/loader.gif);
-  opacity: .5;
+  opacity: .28;
 }
 #sidebar {
   display: block;
@@ -171,8 +177,8 @@ input, button {
   margin-bottom: 2px;
   padding: .2rem .5rem;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: start;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .ui-file-button-created-at {
   color: #555;
@@ -247,9 +253,6 @@ input.ui-file-button-list-filter {
   font-size: .9rem;
   color: #333;
 }
-/*
- Preloader
-*/
 /* Scrollbar */
 
 ::-webkit-scrollbar {
