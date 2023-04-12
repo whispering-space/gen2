@@ -170,11 +170,11 @@ const engine = {
         return sprite;
       })
       .onNodeClick((node) => {
-        //engine.focus(node)
         window.location.hash = "/" + node.id;
-        //engine.ui.loadFile(node.db.files[node.id])
       });
-    this.Graph.cameraPosition({ x: 0, y: 0, z: 300 }, { x: 0, y: 0, z: 0 }, 1);
+    if (window.location.hash === '') {
+      window.location.hash = '#/menu';
+    }
     this.Graph.d3Force("link").distance(function (link) {
       if (undefined === link.force) {
         return 100;
