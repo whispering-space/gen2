@@ -121,7 +121,7 @@ const utils = {
                 id = obj.data.id
             }
             if (id == "_" && undefined !== obj.data.name) {
-                id = slugify(obj.data.name).toLowerCase()
+                id = slugify(obj.data.name).toLowerCase().replace(/[\.\'"`]/,'')
             }
             let type = "document"
             if (undefined !== obj.data.type) {

@@ -137,7 +137,6 @@ const engine = {
       engine.ui.loadUrl(db, window.location.href);
     });
     this.Graph.graphData(graphData);
-
   },
   focus(node) {
     const distance = 300;
@@ -154,6 +153,7 @@ const engine = {
   },
   boot(dom) {
     dom.classList.add("graph-loading");
+    const self = this;
     this.GraphDom = dom;
     this.Graph = ForceGraph3D({})(dom)
       .enableNodeDrag(false)
@@ -172,14 +172,18 @@ const engine = {
       .onNodeClick((node) => {
         window.location.hash = "/" + node.id;
       });
-    if (window.location.hash === '') {
-      window.location.hash = '#/menu';
+    if (window.location.hash === "") {
+      window.location.hash = "#/menu";
     }
     this.Graph.d3Force("link").distance(function (link) {
       if (undefined === link.force) {
         return 100;
       }
       return link.force;
+    });
+    window.addEventListener("resize", function (e) {
+      self.Graph.width(this.window.innerWidth);
+      self.Graph.height(this.window.innerHeight);
     });
   },
   ui: {
@@ -222,7 +226,7 @@ const engine = {
 
       const index = [];
       if (Array.isArray(fileIDs)) {
-        for (const fileID of fileIDs) {
+        for (const fileID of fileIDs.sort()) {
           const el = engine.ui.newFileButtonDom(db, fileID);
           searchScroll.appendChild(el);
           index.push({
@@ -232,10 +236,32 @@ const engine = {
           });
         }
       } else {
+        const buttons = [];
         for (const fileID in fileIDs) {
           const el = engine.ui.newFileButtonDom(db, fileID, fileIDs[fileID]);
-          searchScroll.appendChild(el);
           index.push({ content: el.innerText.toLowerCase(), el: el });
+          buttons.push({ el: el, cmp1: fileIDs[fileID], cmp2: fileID[0] });
+        }
+
+        for (const button of buttons.sort(function compareObj(a, b, f = "cmp1") {
+          if (a[f] == null && b[f] != null) {
+            return 1;
+          }
+          if (a[f] != null && b[f] == null) {
+            return -1;
+          }
+          if (a[f] == null && b[f] == null) {
+            return f === "cmp1" ? compareObj(b, a, "cmp2") : 0;
+          }
+          if (a[f] < b[f]) {
+            return 1;
+          }
+          if (a[f] > b[f]) {
+            return -1;
+          }
+          return f === "cmp1" ? compareObj(b, a, "cmp2") : 0;
+        })) {
+          searchScroll.appendChild(button.el);
         }
       }
 
@@ -277,8 +303,11 @@ const engine = {
       const buttonContentDom = engine.ui.newDom("DIV", {
         classes: ["ui-file-button-content"],
       });
-
       const nameDom = engine.ui.newDom("DIV", { innerHTML: file.name });
+      if (undefined !== file.created_at) {
+        const dateDom = engine.ui.newDom("SPAN", { innerHTML: file.created_at, classes: ['ui-file-button-created-at'] });
+        nameDom.appendChild(dateDom)
+      }
       buttonContentDom.appendChild(nameDom);
 
       if (file.excerpt) {
@@ -311,12 +340,12 @@ const engine = {
               engine.ui.newDom("SPAN", {
                 classes: ["ui-file-button-score"],
                 children: [
-                  engine.ui.newDom("SPAN", { innerHTML: score.name }),
                   engine.ui.newDom("SPAN", {
                     classes: ["ui-file-button-score-value"],
                     innerHTML: value,
                     if: !!value,
                   }),
+                  engine.ui.newDom("SPAN", { innerHTML: score.name }),
                 ],
               })
             );
@@ -438,8 +467,8 @@ const engine = {
     },
     loadSearchList(db) {
       const dom = document.getElementById("search-list");
-      const fileIDs = Object.keys(db.files).sort();
-      const listDom = engine.ui.newFileListDom(db, fileIDs);
+      const fileIDs = Object.keys(db.files);
+      const listDom = engine.ui.newFileListDom(db, fileIDs, "Index");
       dom.appendChild(listDom);
     },
     unloadFile() {
@@ -449,6 +478,14 @@ const engine = {
     loadFile(db, file) {
       const dom = document.getElementById("reader");
       dom.innerHTML = "";
+
+      /*if (file.image) {
+        const imageDom = engine.ui.newDom("IMG", {
+          attributes: {src: file.image},
+          classes: ['ui-file-img'],
+        })
+        dom.appendChild(imageDom)
+      }*/
 
       const header = engine.ui.newDom("DIV", {
         classes: ["ui-file-header"],
@@ -478,6 +515,14 @@ const engine = {
         dom.appendChild(body);
       }
 
+      /*if (file.background) {
+        const imageDom = engine.ui.newDom("IMG", {
+          attributes: {src: file.background},
+          classes: ['ui-file-img'],
+        })
+        dom.appendChild(imageDom)
+      }*/
+
       if (undefined !== file.tags && file.tags.length > 0) {
         const tagList = engine.ui.newFileListDom(db, file.tags, "Tags");
         dom.appendChild(tagList);
@@ -487,19 +532,21 @@ const engine = {
         dom.appendChild(tagList);
       }
 
-      if (undefined !== file.scores && Object.keys(file.scores) > 0) {
-        const tagList = engine.ui.newFileListDom(db, file.scores, "Rates");
+      if (undefined !== file.scores && Object.keys(file.scores).length > 0) {
+        const tagList = engine.ui.newFileListDom(db, file.scores, "Rated");
         dom.appendChild(tagList);
       }
-      if (undefined !== db.score[file.id] && Object.keys(db.score[file.id]).length > 0) {
+      if (
+        undefined !== db.score[file.id] &&
+        Object.keys(db.score[file.id]).length > 0
+      ) {
         const tagList = engine.ui.newFileListDom(
           db,
           db.score[file.id],
-          "Rated"
+          "Rating"
         );
         dom.appendChild(tagList);
       }
-
 
       if (undefined !== file.feeds && file.feeds.length > 0) {
         const feedList = engine.ui.newFileListDom(db, file.feeds, "Feeds");
@@ -515,16 +562,24 @@ const engine = {
         dom.appendChild(relList);
       }
       if (undefined !== db.rel[file.id] && db.rel[file.id].length > 0) {
-        const relList = engine.ui.newFileListDom(db, db.rel[file.id], "Related");
+        const relList = engine.ui.newFileListDom(
+          db,
+          db.rel[file.id],
+          "Related"
+        );
         dom.appendChild(relList);
       }
-      
+
       if (undefined !== file.refs && file.refs.length > 0) {
         const refList = engine.ui.newFileListDom(db, file.refs, "References");
         dom.appendChild(refList);
       }
       if (undefined !== db.ref[file.id] && db.ref[file.id].length > 0) {
-        const refList = engine.ui.newFileListDom(db, db.ref[file.id], "Referenced");
+        const refList = engine.ui.newFileListDom(
+          db,
+          db.ref[file.id],
+          "Referenced"
+        );
         dom.appendChild(refList);
       }
     },
@@ -578,9 +633,9 @@ const engine = {
                 const file = db.files[referencedID];
                 if (file) {
                   if (undefined === file.refs) {
-                    file.refs = []
+                    file.refs = [];
                   }
-                  file.refs.push(refID)
+                  file.refs.push(refID);
                 }
               }
             }
@@ -590,9 +645,9 @@ const engine = {
                 const file = db.files[relatedID];
                 if (file) {
                   if (undefined === file.rels) {
-                    file.rels = []
+                    file.rels = [];
                   }
-                  file.rels.push(relID)
+                  file.rels.push(relID);
                 }
               }
             }
@@ -602,9 +657,9 @@ const engine = {
                 const file = db.files[feededID];
                 if (file) {
                   if (undefined === file.feeds) {
-                    file.feeds = []
+                    file.feeds = [];
                   }
-                  file.feeds.push(feedID)
+                  file.feeds.push(feedID);
                 }
               }
             }

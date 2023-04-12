@@ -5,11 +5,16 @@
 html,
 body {
   overflow: hidden;
+  font-size: 11pt;
 }
-html, body, input, button {
+html, body, input, button, p, ul {
   font-family: monospace;
   padding: 0;
   margin: 0;
+}
+input, button {
+  font-size: 1rem;
+  padding: .2rem;
 }
 #app.graph-loading {
   opacity: 0;
@@ -56,6 +61,11 @@ html, body, input, button {
   width: 30vw;
   overflow: hidden;
 }
+.ui-box {
+  max-height: 100%;
+  overflow-y:auto;
+  overflow-x: hidden;
+}
 #reader:empty {
   display:none;
 }
@@ -84,6 +94,8 @@ html, body, input, button {
 }
 .ui-file-body {
   padding: 0 1rem;
+  border-left: 1px solid #999;
+  margin-bottom: 1px;
 }
 .ui-file-body a {
   color: #ddd;
@@ -107,6 +119,7 @@ html, body, input, button {
   margin-bottom: 2px;
 }
 .ui-file-button-content{ 
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -124,24 +137,29 @@ html, body, input, button {
 }
 .ui-file-button-score,
 .ui-file-button-tag {
-  background: white;
-  color: black;
-  border: 1px solid white;
-  margin-right: 1px;
+  background: #080808;
+  font-size: .75rem;
+  color: #ccc;
+  border: 1px solid black;
+  margin-left: 4px;
+  padding: .2rem;
 }
 .ui-file-button-score-value {
-  background: black;
+  background: #111;
+  padding: 0 1px;
   color: white;
-  margin-left: .1rem;
+  margin-right: .2rem;
+  font-size: .7rem;
 }
 .ui-file-button-excerpt {
   color: #999; 
+  font-size: 0.9rem;
 }
 .ui-file-button-score-prefix {
   width: 3rem;
   display: block;
-  background: white;
-  color: black;
+  background: #080808;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,20 +167,25 @@ html, body, input, button {
 .ui-file-header {
   width: 100%;
   background: #000;
-  border-left: 1px solid white;
+  border-left: 1px solid #999;
   margin-bottom: 2px;
   padding: .2rem .5rem;
   display: flex;
   flex-direction: row-reverse;
   justify-content: start;
 }
+.ui-file-button-created-at {
+  color: #555;
+  font-size: .8rem;
+  float: right;
+}
 .ui-file-button-list-header {
   outline: none;
   border: none;
-  background: transparent;
+  background: #000;
   color: white;
-  width: 100%;
-  border-left: 1px solid white;
+  width: 100%;  
+  border-left: 1px solid #999;
   padding: .2rem; 
   font-size: 1rem;
   margin-bottom: 2px;
@@ -179,8 +202,13 @@ input.ui-file-button-list-filter {
   outline: none;
   border: none;
   color: white;
-  background: #050505;
+  background: #030303;
   padding: .25rem;
+  width: 100%;
+  font-size: .8rem;
+}
+.ui-file-img {
+  object-fit: contain;
   width: 100%;
 }
 .ui-file-button-list-title:empty + input.ui-file-button-list-filter {
@@ -214,6 +242,11 @@ input.ui-file-button-list-filter {
 .ui-box-body form button {
   cursor: pointer;
 }
+.ui-file-button-score-prefix:empty:before {
+  content: "N/A";
+  font-size: .9rem;
+  color: #333;
+}
 /*
  Preloader
 */
@@ -231,4 +264,12 @@ input.ui-file-button-list-filter {
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: red;
+}
+@media (max-width: 1000px) {
+  #sidebar {
+    width: 95vw;
+    right: 1vw;
+    top: auto;
+    bottom: 0;
+  }
 }
