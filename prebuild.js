@@ -33,13 +33,23 @@ const utils = {
         }
         for (const accountID in entities.account) {
             const account = entities.account[accountID]
-            const dataset = {}
+            const dataset = {
+                feed: {},
+                tag: {},
+                score: {},
+                ref: {},
+                rel: {},
+            }
             dataset.account = {
                 id: account.id,
                 name: account.name,
             }
             dataset.files = {}
             for (const documentID in entities.document) {
+                if (documentID.length > 0 && documentID[0] == '#') {
+                    continue
+                }
+
                 const document = entities.document[documentID]
                 if (undefined !== entities.key[documentID]) {
                     const mx = entities.key[documentID].filter(v => account.keys.includes(v));
@@ -59,12 +69,31 @@ const utils = {
                         continue
                     }
                 }
+                for (const v of ["feed","tag","ref","rel"]) {
+                    dataset[v] = {}
+                    for (const vID in entities[v]) {
+                        dataset[v][vID] = []
+                        for (const vVal of entities[v][vID]) {
+                            if (undefined !== dataset.files[vVal]) {
+                                dataset[v][vID].push(vVal)
+                            }
+                        }
+                    }
+                }
+                for (const vID in entities.score) {
+                    dataset.score[vID] = {}
+                    for (const vVal in entities.score[vID]) {
+                        if (undefined !== dataset.files[vVal]) {
+                            dataset.score[vID][vVal] = entities.score[vID][vVal]
+                        }
+                    }
+                }
                 dataset.files[documentID] = document
             }
             const rawJson = JSON.stringify(dataset)
             const cryptoJson = encryption.encryptString(rawJson, `${account.password}`)
             const cryptoID = encryption.hashPassword(account.id, account.password, "1.0")
-            const cryptoPath = path.join(".","/","public","/","db","/",cryptoID)
+            const cryptoPath = path.join(".","/","public","/","db","/",cryptoID + ".dat")
             fs.writeFileSync(cryptoPath, cryptoJson)
             console.log("OK:", cryptoPath)
         }
@@ -92,7 +121,7 @@ const utils = {
                 id = obj.data.id
             }
             if (id == "_" && undefined !== obj.data.name) {
-                id = slugify(obj.data.name)
+                id = slugify(obj.data.name).toLowerCase()
             }
             let type = "document"
             if (undefined !== obj.data.type) {
