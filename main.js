@@ -568,8 +568,8 @@ const engine = {
               }
             }
 
-            for (const refID in db.rel) {
-              for (const referencedID of db.rel[refID]) {
+            for (const refID in db.ref) {
+              for (const referencedID of db.ref[refID]) {
                 const file = db.files[referencedID];
                 if (file) {
                   if (undefined === file.refs) {
