@@ -41,7 +41,7 @@ input, button {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background: url(loader.gif);
+  background: url(/loader.gif);
   opacity: .5;
 }
 #sidebar {
