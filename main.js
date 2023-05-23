@@ -125,6 +125,7 @@ const engine = {
     return graphData;
   },
   load(db) {
+    //console.log('db', db)
     this.GraphDom.classList.add("graph-loading");
     let step = 1;
     const graphData = engine.newGraphData(db, step);
@@ -550,7 +551,6 @@ const engine = {
             }),
           ],
         });
-        console.log(file)
         dom.appendChild(body);
       }
 

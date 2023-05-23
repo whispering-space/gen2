@@ -32,6 +32,7 @@ const utils = {
             utils.parse(obj)
         }
         for (const accountID in entities.account) {
+            console.log("👤", accountID)
             const account = entities.account[accountID]
             const dataset = {
                 feed: {},
@@ -46,6 +47,7 @@ const utils = {
             }
             dataset.files = {}
             for (const documentID in entities.document) {
+                console.log("  📄", documentID)
                 if (documentID.length > 0 && documentID[0] == '#') {
                     continue
                 }
@@ -54,6 +56,7 @@ const utils = {
                 if (undefined !== entities.key[documentID]) {
                     const mx = entities.key[documentID].filter(v => account.keys.includes(v));
                     if (mx.length === 0) {
+                        console.log("    🔒", entities.key[documentID])
                         // page is known yet not accessible
                         dataset.files[documentID] = {
                             id: documentID,
@@ -70,27 +73,33 @@ const utils = {
                         continue
                     }
                 }
-                for (const v of ["feed","tag","ref","rel"]) {
-                    dataset[v] = {}
-                    for (const vID in entities[v]) {
-                        dataset[v][vID] = []
-                        for (const vVal of entities[v][vID]) {
-                            if (undefined !== dataset.files[vVal]) {
-                                dataset[v][vID].push(vVal)
-                            }
-                        }
-                    }
-                }
-                for (const vID in entities.score) {
-                    dataset.score[vID] = {}
-                    for (const vVal in entities.score[vID]) {
-                        if (undefined !== dataset.files[vVal]) {
-                            dataset.score[vID][vVal] = entities.score[vID][vVal]
-                        }
-                    }
-                }
                 dataset.files[documentID] = document
             }
+
+            for (const v of ["feed","tag","ref","rel"]) {
+                if (undefined === dataset[v]) {
+                    dataset[v] = {}
+                }
+                for (const vID in entities[v]) {
+                    if (undefined === dataset[v][vID]) {
+                        dataset[v][vID] = []
+                    }
+                    for (const vVal of entities[v][vID]) {
+                        if (undefined !== dataset.files[vVal]) {
+                            dataset[v][vID].push(vVal)
+                        }
+                    }
+                }
+            }
+            for (const vID in entities.score) {
+                dataset.score[vID] = {}
+                for (const vVal in entities.score[vID]) {
+                    if (undefined !== dataset.files[vVal]) {
+                        dataset.score[vID][vVal] = entities.score[vID][vVal]
+                    }
+                }
+            }
+
             const rawJson = JSON.stringify(dataset)
             const cryptoJson = encryption.encryptString(rawJson, `${account.password}`)
             const cryptoID = encryption.hashPassword(account.id, account.password, "1.0")
