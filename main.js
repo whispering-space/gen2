@@ -299,6 +299,10 @@ const engine = {
         return buttonDom;
       }
 
+      if (file.keys !== undefined && file.keys.length > 0) {
+        buttonDom.classList.add("ui-locked")
+      }
+      
       if (undefined !== score) {
         const scoreDom = engine.ui.newDom("DIV", {
           innerHTML: score,

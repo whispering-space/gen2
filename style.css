@@ -124,6 +124,9 @@ input, button {
   border-left: 1px solid white;
   margin-bottom: 2px;
 }
+.ui-file-button.ui-locked {
+  border-left: 1px solid #555;
+}
 .ui-file-button-content{ 
   position: relative;
   display: flex;
