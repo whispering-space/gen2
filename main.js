@@ -201,6 +201,34 @@ const engine = {
       });
       return headerDom;
     },
+    newLinkListDom(links, caption = undefined) {
+      const listDom = engine.ui.newDom("DIV", {
+        classes: ["ui-file-button-list"],
+      });
+      const headerDom = engine.ui.newDom("DIV", {
+        classes: ["ui-file-button-list-header"],
+      });
+      if (caption !== undefined) {
+        const captionDom = engine.ui.newDom("DIV", {
+          classes: ["ui-file-button-list-title"],
+          innerHTML: caption,
+        });
+        headerDom.appendChild(captionDom);
+      }
+      listDom.appendChild(headerDom);
+
+      const searchScroll = engine.ui.newDom("DIV", {
+        classes: ["ui-file-button-list-body"],
+      });
+      listDom.appendChild(searchScroll);
+
+      for (const link of links) {
+        const btnDom = engine.ui.newUrlButton(link)
+        searchScroll.appendChild(btnDom)
+      }
+
+      return listDom
+    },
     newFileListDom(db, fileIDs, caption = undefined) {
       const listDom = engine.ui.newDom("DIV", {
         classes: ["ui-file-button-list"],
@@ -284,6 +312,29 @@ const engine = {
       });
 
       return listDom;
+    },
+    newUrlButton(link) {
+      const buttonDom = engine.ui.newDom("A", {
+        classes: ["ui-file-button"],
+        attributes: {
+          target: "_blank",
+          href: link.url,
+        },
+      });
+      const buttonContentDom = engine.ui.newDom("DIV", {
+        classes: ["ui-file-button-content"],
+      });
+      const nameDom = engine.ui.newDom("DIV", { innerHTML: link.name || link });
+      buttonContentDom.appendChild(nameDom);
+
+      const excerptDom = engine.ui.newDom("DIV", {
+        classes: ["ui-file-button-excerpt"],
+        innerHTML: link.url,
+      });
+      buttonContentDom.appendChild(excerptDom);
+
+      buttonDom.appendChild(buttonContentDom)
+      return buttonDom
     },
     newFileButtonDom(db, fileID, score = undefined) {
       const buttonDom = engine.ui.newDom("A", {
@@ -565,6 +616,10 @@ const engine = {
         })
         dom.appendChild(imageDom)
       }*/
+      if (undefined !== file.links && file.links.length > 0) {
+        const linksList = engine.ui.newLinkListDom(file.links, "Links")
+        dom.appendChild(linksList)
+      }
 
       if (undefined !== file.tags && file.tags.length > 0) {
         const tagList = engine.ui.newFileListDom(db, file.tags, "Tags");

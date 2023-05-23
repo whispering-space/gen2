@@ -72,6 +72,7 @@ const utils = {
                             content: undefined,
                             excerpt: document.excerpt,
                             keys: missing,
+                            links: [],
                         }
                         continue
                     }
@@ -269,6 +270,7 @@ const utils = {
             created_at: obj.data.created_at,
             content: obj.data.content,
             excerpt: obj.data.excerpt,
+            links: obj.data.links || [],
         }
     },
     fs: {
