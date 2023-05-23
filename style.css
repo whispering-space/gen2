@@ -213,6 +213,14 @@ input.ui-file-button-list-filter {
   width: 100%;
   font-size: .8rem;
 }
+.ui-file-body .ui-locked {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 5px;
+  margin: 12px 0;
+  border: 1px solid #555;
+  filter: saturate(0.0);
+}
 .ui-file-img {
   object-fit: contain;
   width: 100%;

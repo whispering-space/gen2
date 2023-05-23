@@ -30,6 +30,9 @@ const engine = {
             fz: 0,
             db: db,
           };
+          if (file.mode == 403) {
+            node.color = "#333"
+          }
           db.files[file.id].node = node;
           graphData.nodes.push(node);
         } else {
@@ -38,6 +41,9 @@ const engine = {
             label: file.name,
             db: db,
           };
+          if (file.mode == 403) {
+            node.color = "#333"
+          }
           db.files[file.id].node = node;
           graphData.nodes.push(node);
         }
@@ -378,6 +384,9 @@ const engine = {
       if (undefined !== opts.innerHTML) {
         dom.innerHTML = opts.innerHTML;
       }
+      if (undefined !== opts.title) {
+        dom.title = opts.title;
+      }
       if (undefined !== opts.children) {
         for (const child of opts.children) {
           if (null === child) {
@@ -527,6 +536,21 @@ const engine = {
             }),
           ],
         });
+        dom.appendChild(body);
+      }
+
+      if (403 == file.mode) {
+        const body = engine.ui.newDom("DIV", {
+          classes: ["ui-file-body"],
+          children: [
+            engine.ui.newDom("DIV", {
+              innerHTML: "🔒 " + file.keys.join(", "),
+              classes: ["ui-locked"],
+              title: "Content is not available for your account authorization level yet",
+            }),
+          ],
+        });
+        console.log(file)
         dom.appendChild(body);
       }
 

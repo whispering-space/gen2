@@ -65,6 +65,7 @@ const utils = {
                             created_at: document.created_at,
                             content: undefined,
                             excerpt: document.excerpt,
+                            keys: entities.key[documentID],
                         }
                         continue
                     }
@@ -173,6 +174,12 @@ const utils = {
                 }
                 entities.key[id].push(keyID)
             }
+        } else {
+            const keyID = "draft"
+            if (undefined === entities.key[keyID]) {
+                entities.key[id] = []
+            }
+            entities.key[id].push(keyID)
         }
 
         // obj.data.tags array|string<id>
