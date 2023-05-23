@@ -55,7 +55,10 @@ const utils = {
                 const document = entities.document[documentID]
                 if (undefined !== entities.key[documentID]) {
                     const mx = entities.key[documentID].filter(v => account.keys.includes(v));
+                    const missing = entities.key[documentID].filter(v => !account.keys.includes(v));
                     if (mx.length === 0) {
+                        continue
+                    } else if (mx.length !== entities.key[documentID].length) {
                         console.log("    🔒", entities.key[documentID])
                         // page is known yet not accessible
                         dataset.files[documentID] = {
@@ -68,7 +71,7 @@ const utils = {
                             created_at: document.created_at,
                             content: undefined,
                             excerpt: document.excerpt,
-                            keys: entities.key[documentID],
+                            keys: missing,
                         }
                         continue
                     }
@@ -81,10 +84,16 @@ const utils = {
                     dataset[v] = {}
                 }
                 for (const vID in entities[v]) {
+                    if ( dataset.files[vID] === undefined) {
+                        continue
+                    }
                     if (undefined === dataset[v][vID]) {
                         dataset[v][vID] = []
                     }
                     for (const vVal of entities[v][vID]) {
+                        if (dataset.files[vVal] === undefined) {
+                            continue
+                        }
                         if (undefined !== dataset.files[vVal]) {
                             dataset[v][vID].push(vVal)
                         }
@@ -92,9 +101,17 @@ const utils = {
                 }
             }
             for (const vID in entities.score) {
+                if ( dataset.files[vID] === undefined) {
+                    continue
+                }
+
                 dataset.score[vID] = {}
                 for (const vVal in entities.score[vID]) {
                     if (undefined !== dataset.files[vVal]) {
+                        if ( dataset.files[vVal] === undefined) {
+                            continue
+                        }
+
                         dataset.score[vID][vVal] = entities.score[vID][vVal]
                     }
                 }
@@ -178,7 +195,7 @@ const utils = {
         // obj.data.keys array|string<id> (authorization data)
         if (obj.data.keys !== undefined) {
             for (const keyID of utils.toArray(obj.data.keys)) {
-                if (undefined === entities.key[keyID]) {
+                if (undefined === entities.key[id]) {
                     entities.key[id] = []
                 }
                 entities.key[id].push(keyID)
