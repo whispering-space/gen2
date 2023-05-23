@@ -7,7 +7,12 @@ body {
   overflow: hidden;
   font-size: 11pt;
 }
-html, body, input, button, p, ul {
+html,
+body,
+input,
+button,
+p,
+ul {
   font-family: monospace;
   padding: 0;
   margin: 0;
@@ -16,12 +21,14 @@ ul {
   padding-left: 1rem;
   list-style-type: "- ";
 }
-p, li {
-  margin-bottom: .5rem;
+p,
+li {
+  margin-bottom: 0.5rem;
 }
-input, button {
+input,
+button {
   font-size: 1rem;
-  padding: .2rem;
+  padding: 0.2rem;
 }
 #app.graph-loading {
   opacity: 0;
@@ -48,7 +55,7 @@ input, button {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  opacity: .28;
+  opacity: 0.28;
 }
 #sidebar {
   display: block;
@@ -68,12 +75,12 @@ input, button {
   overflow: hidden;
 }
 .ui-box {
-  max-height: 100%;
-  overflow-y:auto;
+  max-height: 97%;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 #reader:empty {
-  display:none;
+  display: none;
 }
 #reader:not(:empty) + #search-list {
   display: none;
@@ -102,6 +109,7 @@ input, button {
   padding: 0 1rem;
   border-left: 1px solid #999;
   margin-bottom: 1px;
+  line-height: 1.4;
 }
 .ui-file-body a {
   color: #ddd;
@@ -127,12 +135,12 @@ input, button {
 .ui-file-button.ui-locked {
   border-left: 1px solid #555;
 }
-.ui-file-button-content{ 
+.ui-file-button-content {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 .2rem 0 .5rem;
+  padding: 0 0.2rem 0 0.5rem;
 }
 .ui-file-button:hover {
   border-left-color: red;
@@ -147,21 +155,21 @@ input, button {
 .ui-file-button-score,
 .ui-file-button-tag {
   background: #080808;
-  font-size: .75rem;
+  font-size: 0.75rem;
   color: #ccc;
   border: 1px solid black;
   margin-left: 4px;
-  padding: .2rem;
+  padding: 0.2rem;
 }
 .ui-file-button-score-value {
   background: #111;
   padding: 0 1px;
   color: white;
-  margin-right: .2rem;
-  font-size: .7rem;
+  margin-right: 0.2rem;
+  font-size: 0.7rem;
 }
 .ui-file-button-excerpt {
-  color: #999; 
+  color: #999;
   font-size: 0.9rem;
 }
 .ui-file-button-score-prefix {
@@ -178,14 +186,14 @@ input, button {
   background: #000;
   border-left: 1px solid #999;
   margin-bottom: 2px;
-  padding: .2rem .5rem;
+  padding: 0.2rem 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 .ui-file-button-created-at {
   color: #555;
-  font-size: .8rem;
+  font-size: 0.8rem;
   float: right;
 }
 .ui-file-button-list-header {
@@ -193,28 +201,28 @@ input, button {
   border: none;
   background: #000;
   color: white;
-  width: 100%;  
+  width: 100%;
   border-left: 1px solid #999;
-  padding: .2rem; 
+  padding: 0.2rem;
   font-size: 1rem;
   margin-bottom: 2px;
-  display:  flex;
+  display: flex;
   flex-direction: row;
 }
 .ui-file-button-list-title {
   width: auto;
   display: flex;
   align-items: center;
-  padding: .25rem;
+  padding: 0.25rem;
 }
 input.ui-file-button-list-filter {
   outline: none;
   border: none;
   color: white;
   background: #030303;
-  padding: .25rem;
+  padding: 0.25rem;
   width: 100%;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 .ui-file-body .ui-locked {
   width: 100%;
@@ -222,7 +230,7 @@ input.ui-file-button-list-filter {
   padding-bottom: 5px;
   margin: 12px 0;
   border: 1px solid #555;
-  filter: saturate(0.0);
+  filter: saturate(0);
 }
 .ui-file-img {
   object-fit: contain;
@@ -239,7 +247,8 @@ input.ui-file-button-list-filter {
 .ui-box-body form > div {
   width: 100%;
 }
-.ui-box-body form input, .ui-box-body form button {
+.ui-box-body form input,
+.ui-box-body form button {
   background: #111;
   border: none;
   border-left: 1px solid white;
@@ -253,7 +262,8 @@ input.ui-file-button-list-filter {
   color: red;
   border-left-color: red;
 }
-.ui-box-body form input:hover, .ui-box-body form button:hover {
+.ui-box-body form input:hover,
+.ui-box-body form button:hover {
   border-left: 1px solid red;
 }
 .ui-box-body form button {
@@ -261,7 +271,7 @@ input.ui-file-button-list-filter {
 }
 .ui-file-button-score-prefix:empty:before {
   content: "N/A";
-  font-size: .9rem;
+  font-size: 0.9rem;
   color: #333;
 }
 /* Scrollbar */
@@ -269,10 +279,10 @@ input.ui-file-button-list-filter {
 ::-webkit-scrollbar {
   width: 1rem;
 }
- 
+
 ::-webkit-scrollbar-track {
 }
- 
+
 ::-webkit-scrollbar-thumb {
   background-color: white;
 }
@@ -286,4 +296,15 @@ input.ui-file-button-list-filter {
     top: auto;
     bottom: 0;
   }
+}
+
+.ui-file-body h1,
+.ui-file-body h2,
+.ui-file-body h3,
+.ui-file-body h4,
+.ui-file-body h5,
+.ui-file-body h6 {
+  background: #070707;
+  margin: 0 0 10px 0;
+  padding: 0.5rem;
 }
