@@ -232,7 +232,7 @@ const utils = {
         // obj.data.refs array|string<id>
         if (obj.data.refs !== undefined) {
             for (const refID of utils.toArray(obj.data.refs)) {
-                if (undefined === entities.ref[refID]) {
+                if (undefined === entities.ref[id]) {
                     entities.ref[id] = []
                 }
                 entities.ref[id].push(refID)

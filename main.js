@@ -457,6 +457,7 @@ const engine = {
       const id = url.split("/#/")[1] || "";
       const file = db.files[id];
       if (file != undefined && file.node != undefined) {
+        //console.log(file)
         engine.ui.loadFile(db, file);
         engine.focus(file.node);
       } else {
@@ -669,14 +670,14 @@ const engine = {
       }
 
       if (undefined !== file.refs && file.refs.length > 0) {
-        const refList = engine.ui.newFileListDom(db, file.refs, "References");
+        const refList = engine.ui.newFileListDom(db, file.refs, "Referenced");
         dom.appendChild(refList);
       }
       if (undefined !== db.ref[file.id] && db.ref[file.id].length > 0) {
         const refList = engine.ui.newFileListDom(
           db,
           db.ref[file.id],
-          "Referenced"
+          "References"
         );
         dom.appendChild(refList);
       }
