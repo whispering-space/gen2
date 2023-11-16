@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host ws.dev-ra.pp.ua --port 5173",
     "build": "vite build",
     "preview": "vite preview",
     "prebuild": "node prebuild.js"
