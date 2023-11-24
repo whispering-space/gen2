@@ -64,7 +64,9 @@ const engine = {
             source: startID,
             target: endID,
             force: 500,
-            hidden: true,
+            //hidden: true,
+            hidden: false,
+            color: "#500",
           });
         }
       }
@@ -98,7 +100,7 @@ const engine = {
               target: startID2,
               force: 5000,
               hidden: false,
-              color: "#f00",
+              color: "#500",
             });
           }
         }
@@ -117,7 +119,9 @@ const engine = {
             source: startID,
             target: endID,
             force: (100 - score) * 2 + 300 + 3000 * Math.random(),
-            hidden: true,
+            //hidden: true,
+            hidden: false,
+            color: "#500",
           });
         }
       }
